@@ -1,0 +1,210 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f2f2f2;
+    padding:30px;
+}
+
+.contenedor{
+    width:1100px;
+    margin:auto;
+    background:white;
+    display:flex;
+    box-shadow:0 0 15px rgba(0,0,0,.15);
+}
+
+/* ===========================
+   SIDEBAR
+=========================== */
+
+.sidebar{
+    width:320px;
+    background:#c49286;
+    padding:25px;
+}
+
+.titulo{
+    background:#f2dfd8;
+    color:#333;
+    text-align:center;
+    font-weight:bold;
+    letter-spacing:2px;
+    padding:10px;
+    margin:20px 0 15px;
+}
+
+/* ===========================
+   CONTENIDO
+=========================== */
+
+.contenido{
+    flex:1;
+    padding:35px;
+}
+
+.encabezado{
+    background:#f2dfd8;
+    padding:20px;
+    margin-bottom:30px;
+}
+
+h2{
+    background:#f2dfd8;
+    color:#333;
+    padding:10px;
+    margin-bottom:20px;
+}
+
+/* ===========================
+   TEXTAREA
+=========================== */
+
+textarea{
+    width:100%;
+    border:1px solid #ccc;
+    border-radius:6px;
+    padding:10px;
+    resize:vertical;
+    font-size:15px;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:#c49286;
+}
+
+.nombre{
+    height:60px;
+    font-size:26px;
+    font-weight:bold;
+}
+
+.puesto{
+    height:45px;
+}
+
+.descripcion{
+    height:110px;
+}
+
+.pequeno{
+    height:45px;
+}
+
+.lista{
+    height:120px;
+}
+
+.educacion{
+    height:120px;
+}
+
+/* ===========================
+   EXPERIENCIA
+=========================== */
+
+.experiencia{
+    border-left:3px solid #c49286;
+    padding-left:20px;
+    margin-bottom:35px;
+    position:relative;
+}
+
+.experiencia::before{
+    content:"";
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#c49286;
+    position:absolute;
+    left:-9px;
+    top:8px;
+}
+
+/* ===========================
+   CAMPOS
+=========================== */
+
+.campo{
+    margin-bottom:18px;
+}
+
+/* ===========================
+   BOTONES DE CADA CAMPO
+=========================== */
+
+.acciones{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:8px;
+}
+
+.acciones button{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:50%;
+    background:#c49286;
+    color:white;
+    cursor:pointer;
+    transition:.3s;
+    font-size:14px;
+}
+
+.acciones button:hover{
+    background:#8f665d;
+    transform:scale(1.08);
+}
+
+/* ===========================
+   BOTONES GENERALES
+=========================== */
+
+.acciones-generales{
+    width:1100px;
+    margin:25px auto;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+}
+
+.acciones-generales button{
+    padding:12px 28px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    color:white;
+    font-size:16px;
+    transition:.3s;
+}
+
+.btn-get{
+    background:#3498db;
+}
+
+.btn-post{
+    background:#27ae60;
+}
+
+.btn-put{
+    background:#f39c12;
+}
+
+.btn-delete{
+    background:#e74c3c;
+}
+
+.acciones-generales button:hover{
+    opacity:.85;
+    transform:translateY(-2px);
+}
+
+i{
+    margin-right:5px;
+}

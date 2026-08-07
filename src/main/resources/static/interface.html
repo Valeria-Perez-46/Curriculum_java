@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Iconos -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<title>Currículum</title>
+
+</head>
+
+<body>
+
+  <div class="contenedor">
+
+    <aside class="sidebar">
+
+        <div class="titulo">CONTACTO</div>
+
+        <div class="campo">
+            <textarea id="telefono" class="pequeno" placeholder="Teléfono"></textarea>
+        </div>
+
+        <div class="campo">
+            <textarea id="correo" class="pequeno" placeholder="Correo electrónico"></textarea>
+        </div>
+
+        <div class="campo">
+            <textarea id="sitio" class="pequeno" placeholder="Sitio web"></textarea>
+        </div>
+
+        <div class="titulo">HABILIDADES</div>
+
+        <div class="campo">
+            <textarea id="habilidades" class="lista" placeholder="Escribe una habilidad por línea"></textarea>
+        </div>
+
+        <div class="titulo">IDIOMAS</div>
+
+        <div class="campo">
+            <textarea id="idiomas" class="lista" placeholder="Español&#10;Inglés"></textarea>
+        </div>
+
+        <div class="titulo">EDUCACIÓN</div>
+
+        <div class="campo">
+            <textarea id="educacion" class="educacion" placeholder="Escribe aquí tu formación académica"></textarea>
+        </div>
+
+    </aside>
+
+    <main class="contenido">
+
+        <div class="encabezado">
+
+            <div class="campo">
+                <textarea id="nombre" class="nombre" placeholder="Nombre completo"></textarea>
+            </div>
+
+            <div class="campo">
+                <textarea id="puesto" class="puesto" placeholder="Profesión o puesto"></textarea>
+            </div>
+
+            <div class="campo">
+                <textarea id="perfil" class="descripcion" placeholder="Perfil profesional"></textarea>
+            </div>
+
+        </div>
+
+        <h2>EXPERIENCIA LABORAL</h2>
+
+        <div class="experiencia">
+
+            <div class="campo">
+                <textarea id="periodo1" class="pequeno" placeholder="Periodo"></textarea>
+            </div>
+
+            <div class="campo">
+                <textarea id="empresa1" class="pequeno" placeholder="Empresa y puesto"></textarea>
+            </div>
+
+            <div class="campo">
+                <textarea id="descripcion1" class="descripcion" placeholder="Describe tus actividades"></textarea>
+            </div>
+
+        </div>
+
+    </main>
+
+  </div>
+
+    <div class="acciones-generales">
+
+        <button class = "btn-get" onclick="obtenerCurriculum()">
+            <i class="fa-solid fa-eye"></i> Traer registros
+        </button>
+
+        <button class="btn-post" onclick="crearCampo()">
+            <i class="fa-solid fa-plus"></i> Crear registros
+        </button>
+
+        <button class="btn-put" onclick="editarCampo()">
+        <i class="fa-solid fa-pen"></i> Editar registros
+    </button>
+
+    <button class="btn-delete" onclick="eliminarCampo()">
+        <i class="fa-solid fa-trash"></i> Eliminar registros
+    </button>
+
+    </div>
+<script src="script.js"></script>
+</body>
+</html>
