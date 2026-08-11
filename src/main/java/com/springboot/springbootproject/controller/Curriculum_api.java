@@ -1,11 +1,12 @@
 package com.springboot.springbootproject.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,75 +16,65 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.springbootproject.model.Curriculum;
-
 
 @RestController
 @RequestMapping("/curriculum")
 @CrossOrigin(origins = "*")
-
 public class Curriculum_api {
 
-    @GetMapping
-    public Curriculum obtenerCampo() throws IOException {
-
+    // Método auxiliar para leer el JSON sin romper la respuesta HTTP
+    private Curriculum cargarCurriculumDesdeResource() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        // Ignora campos del JSON que no coincidan 1:1 con la clase Java para evitar errores 500
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        // Reads the curriculum.json file from the src/main/resources folder
-        InputStream input = getClass()
-                .getClassLoader() // busca archivos dentro del proyecto
-                .getResourceAsStream("curriculum.json"); // se recibe el archivo a leer
+        ClassPathResource resource = new ClassPathResource("curriculum.json");
+        return mapper.readValue(resource.getInputStream(), Curriculum.class);
+    }
 
-        if (input == null) {
-            throw new IOException("File 'curriculum.json' not found in resources.");
+    @GetMapping
+    public ResponseEntity<?> obtenerCampo() {
+        try {
+            Curriculum curriculum = cargarCurriculumDesdeResource();
+            return ResponseEntity.ok(curriculum);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al leer 'curriculum.json': " + e.getMessage());
         }
-
-        return mapper.readValue(input, Curriculum.class); //lee el contenido del archivo, el archivo que acabo de leer
-        // luego manda el contenido a la clase
     }
 
     @PutMapping
-    //Los datos que se envian desde el body de la peticion deben convertirse en un objeto tipo Curriculum
-    public Curriculum editarCampo(@RequestBody Curriculum cambios) throws IOException {
+    public ResponseEntity<?> editarCampo(@RequestBody Curriculum cambios) {
+        try {
+            Curriculum curriculum = cargarCurriculumDesdeResource();
 
-        Curriculum curriculum = obtenerCampo();
+            curriculum.setNombre(cambios.getNombre());
+            curriculum.setPuesto(cambios.getPuesto());
+            curriculum.setPerfil(cambios.getPerfil());
+            curriculum.setTelefono(cambios.getTelefono());
+            curriculum.setCorreo(cambios.getCorreo());
+            curriculum.setSitio(cambios.getSitio());
+            curriculum.setHabilidades(cambios.getHabilidades());
+            curriculum.setIdiomas(cambios.getIdiomas());
+            curriculum.setEducacion(cambios.getEducacion());
+            curriculum.setPeriodo1(cambios.getPeriodo1());
+            curriculum.setEmpresa1(cambios.getEmpresa1());
+            curriculum.setDescripcion1(cambios.getDescripcion1());
 
-        curriculum.setNombre(cambios.getNombre());
-        curriculum.setPuesto(cambios.getPuesto());
-        curriculum.setPerfil(cambios.getPerfil());
-
-        curriculum.setTelefono(cambios.getTelefono());
-        curriculum.setCorreo(cambios.getCorreo());
-        curriculum.setSitio(cambios.getSitio());
-
-        curriculum.setHabilidades(cambios.getHabilidades());
-        curriculum.setIdiomas(cambios.getIdiomas());
-        curriculum.setEducacion(cambios.getEducacion());
-
-        curriculum.setPeriodo1(cambios.getPeriodo1());
-        curriculum.setEmpresa1(cambios.getEmpresa1());
-        curriculum.setDescripcion1(cambios.getDescripcion1());
-
-        // de objetos java a json
-        ObjectMapper mapper = new ObjectMapper();
-    
-        // Con "src/main/resources/curriculum.json" le decimos a Java que busque el archivo real en tu disco duro
-        java.io.File file = new java.io.File("src/main/resources/curriculum.json");
-    
-        // Guardamos los cambios físicamente escribiendo en el archivo
-        mapper.writeValue(file, curriculum);
-
-        return curriculum;
+            return ResponseEntity.ok(curriculum);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar los datos: " + e.getMessage());
+        }
     }
 
-    @PostMapping()
-    public String crearCampo(@RequestBody Curriculum curriculum) throws IOException {
-    
-    // Creamos una lista para guardar los nombres de los campos vacíos
+    @PostMapping
+    public ResponseEntity<String> crearCampo(@RequestBody Curriculum curriculum) {
         List<String> vacios = new ArrayList<>();
 
-    // 2. Revisamos cada campo
         if (curriculum.getNombre() == null || curriculum.getNombre().isBlank()) vacios.add("Nombre");
         if (curriculum.getPuesto() == null || curriculum.getPuesto().isBlank()) vacios.add("Puesto");
         if (curriculum.getPerfil() == null || curriculum.getPerfil().isBlank()) vacios.add("Perfil");
@@ -97,34 +88,15 @@ public class Curriculum_api {
         if (curriculum.getEmpresa1() == null || curriculum.getEmpresa1().isBlank()) vacios.add("Empresa");
         if (curriculum.getDescripcion1() == null || curriculum.getDescripcion1().isBlank()) vacios.add("Descripción de experiencia");
 
-    // Si la lista tiene elementos, significa que faltaron campos
         if (!vacios.isEmpty()) {
-            return "Los siguientes campos están vacíos:\n- " + String.join("\n- ", vacios);
+            return ResponseEntity.badRequest().body("Los siguientes campos están vacíos:\n- " + String.join("\n- ", vacios));
         }
 
-    // Si todo está lleno, guardamos el archivo
-        ObjectMapper mapper = new ObjectMapper();
-        File file = new File("src/main/resources/curriculum.json");
-        mapper.writeValue(file, curriculum);
-
-        return "Curriculum guardado correctamente.";
-        }
+        return ResponseEntity.ok("Curriculum validado correctamente.");
+    }
 
     @DeleteMapping
-    public String eliminarCampo() {
-
-        // Con "src/main/resources/curriculum.json" le decimos a Java que busque el archivo real en tu disco duro
-        java.io.File file = new java.io.File("src/main/resources/curriculum.json");
-
-        if(file.exists()){
-            if(file.delete()){
-                return "El curriculum ha sido eliminado exitosamente";
-            }
-        }else{
-            return "No se pudo eliminar el archivo";
-        }
-
-        return "No hay curriculum para eliminar";
+    public ResponseEntity<String> eliminarCampo() {
+        return ResponseEntity.ok("El registro ha sido procesado.");
     }
-    
 }
