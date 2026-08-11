@@ -1,4 +1,4 @@
-const API_URL = "/api";
+const API_URL = "/";
 
 // Función para el botón general "GET"
 async function obtenerCurriculum() {
