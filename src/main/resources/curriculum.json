@@ -1,14 +1,14 @@
 {
-  "nombre": "",
-  "puesto": "",
-  "perfil": "",
-  "telefono": "",
-  "correo": "",
-  "sitio": "",
-  "habilidades": "",
-  "idiomas": "",
-  "educacion": "",
-  "periodo1": "",
-  "empresa1": "",
-  "descripcion1": ""
+  "nombre": "Valeria Pérez",
+  "puesto": "Desarrolladora Full Stack",
+  "perfil": "Perfil profesional actualizado desde Postman.",
+  "telefono": "6141234567",
+  "correo": "valeria@ejemplo.com",
+  "sitio": "https://github.com/valeriaperez",
+  "habilidades": "Java, Spring Boot, React, PostgreSQL",
+  "idiomas": "Español, Inglés",
+  "educacion": "Ingeniería en Desarrollo y Gestión de Software",
+  "periodo1": "2024 - Presente",
+  "empresa1": "Proyecto Personal",
+  "descripcion1": "Desarrollo de API REST con Spring Boot y despliegue en Render."
 }

@@ -113,6 +113,18 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     </button>
 
     </div>
+    <!-- Contenedor donde se mostrarán los datos -->
+<div id="datos">Cargando información...</div>
+
+<!-- Código sencillo para traer la API -->
+<script>
+  fetch('https://curriculum-java-uoy0.onrender.com/api')
+    .then(respuesta => respuesta.json())
+    .then(datos => {
+      document.getElementById('datos').innerHTML = `<pre>${JSON.stringify(datos, null, 2)}</pre>`;
+    });
+</script>
+
 <script src="script.js"></script>
 </body>
 </html>
