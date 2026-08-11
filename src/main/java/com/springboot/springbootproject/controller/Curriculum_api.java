@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.springbootproject.model.Curriculum;
 
 @RestController
-@RequestMapping("/curriculum")
+@RequestMapping("/")
 @CrossOrigin(origins = "*")
 public class Curriculum_api {
 

@@ -1,4 +1,4 @@
-const API_URL = "https://curriculum-java-uoy0.onrender.com/curriculum";
+const API_URL = "https://curriculum-java-uoy0.onrender.com/";
 
 // Función para el botón general "GET"
 async function obtenerCurriculum() {
