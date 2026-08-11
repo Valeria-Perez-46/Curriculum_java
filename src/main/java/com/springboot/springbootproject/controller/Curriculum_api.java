@@ -25,10 +25,9 @@ import com.springboot.springbootproject.model.Curriculum;
 @CrossOrigin(origins = "*")
 public class Curriculum_api {
 
-    // 1. Declaración de la variable global en memoria
+    // Variable de instancia única
     private Curriculum curriculumGuardado;
 
-    // Método auxiliar para leer el JSON inicial
     private Curriculum cargarCurriculumDesdeResource() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -37,7 +36,7 @@ public class Curriculum_api {
         return mapper.readValue(resource.getInputStream(), Curriculum.class);
     }
 
-    // GET: Devuelve la variable en memoria si existe; si no, lee del JSON
+    // GET: Si no existe en memoria, carga el JSON inicial. Si existe, devuelve el guardado.
     @GetMapping
     public ResponseEntity<?> obtenerCampo() {
         try {
@@ -51,36 +50,15 @@ public class Curriculum_api {
         }
     }
 
-    // PUT: Guarda los cambios en 'curriculumGuardado' para que persistan
+    // PUT: Reemplaza o actualiza directamente el objeto en memoria
     @PutMapping
     public ResponseEntity<?> editarCampo(@RequestBody Curriculum cambios) {
-        try {
-            if (this.curriculumGuardado == null) {
-                this.curriculumGuardado = cargarCurriculumDesdeResource();
-            }
-
-            // Actualizamos los datos
-            this.curriculumGuardado.setNombre(cambios.getNombre());
-            this.curriculumGuardado.setPuesto(cambios.getPuesto());
-            this.curriculumGuardado.setPerfil(cambios.getPerfil());
-            this.curriculumGuardado.setTelefono(cambios.getTelefono());
-            this.curriculumGuardado.setCorreo(cambios.getCorreo());
-            this.curriculumGuardado.setSitio(cambios.getSitio());
-            this.curriculumGuardado.setHabilidades(cambios.getHabilidades());
-            this.curriculumGuardado.setIdiomas(cambios.getIdiomas());
-            this.curriculumGuardado.setEducacion(cambios.getEducacion());
-            this.curriculumGuardado.setPeriodo1(cambios.getPeriodo1());
-            this.curriculumGuardado.setEmpresa1(cambios.getEmpresa1());
-            this.curriculumGuardado.setDescripcion1(cambios.getDescripcion1());
-
-            return ResponseEntity.ok(this.curriculumGuardado);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al actualizar los datos: " + e.getMessage());
-        }
+        // En lugar de hacer setters uno por uno sobre un objeto nulo o recargado, 
+        // asignamos el objeto recibido directamente a la variable global.
+        this.curriculumGuardado = cambios;
+        return ResponseEntity.ok(this.curriculumGuardado);
     }
 
-    // POST: Valida que ningún campo esté vacío
     @PostMapping
     public ResponseEntity<String> crearCampo(@RequestBody Curriculum curriculum) {
         List<String> vacios = new ArrayList<>();
@@ -105,7 +83,6 @@ public class Curriculum_api {
         return ResponseEntity.ok("Curriculum validado correctamente.");
     }
 
-    // DELETE: Vacía o limpia los datos en memoria
     @DeleteMapping
     public ResponseEntity<String> eliminarCampo() {
         this.curriculumGuardado = new Curriculum();
