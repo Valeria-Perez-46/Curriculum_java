@@ -1,10 +1,17 @@
-# Compilar la aplicación con Maven
+# Compilacion
 FROM maven:3.9.6-eclipse-temurin-21 AS build
+WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Ejecutar la aplicación con una imagen ligera de Java 17
-FROM eclipse-temurin:17-jre-alpine
-COPY --from=build /target/springbootproject-0.0.1-SNAPSHOT.jar app.jar
+# Ejecucion
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+# Busca el .jar tanto en /app/target/ como en /target/
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Pasa el puerto de Render dinámicamente si existe, o usa 8080 por defecto
+ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=${PORT:-8080}"]
