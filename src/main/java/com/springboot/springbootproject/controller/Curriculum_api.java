@@ -25,52 +25,62 @@ import com.springboot.springbootproject.model.Curriculum;
 @CrossOrigin(origins = "*")
 public class Curriculum_api {
 
-    // Método auxiliar para leer el JSON sin romper la respuesta HTTP
+    // 1. Declaración de la variable global en memoria
+    private Curriculum curriculumGuardado;
+
+    // Método auxiliar para leer el JSON inicial
     private Curriculum cargarCurriculumDesdeResource() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        // Ignora campos del JSON que no coincidan 1:1 con la clase Java para evitar errores 500
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         ClassPathResource resource = new ClassPathResource("curriculum.json");
         return mapper.readValue(resource.getInputStream(), Curriculum.class);
     }
 
+    // GET: Devuelve la variable en memoria si existe; si no, lee del JSON
     @GetMapping
     public ResponseEntity<?> obtenerCampo() {
         try {
-            Curriculum curriculum = cargarCurriculumDesdeResource();
-            return ResponseEntity.ok(curriculum);
+            if (this.curriculumGuardado == null) {
+                this.curriculumGuardado = cargarCurriculumDesdeResource();
+            }
+            return ResponseEntity.ok(this.curriculumGuardado);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al leer 'curriculum.json': " + e.getMessage());
         }
     }
 
+    // PUT: Guarda los cambios en 'curriculumGuardado' para que persistan
     @PutMapping
     public ResponseEntity<?> editarCampo(@RequestBody Curriculum cambios) {
         try {
-            Curriculum curriculum = cargarCurriculumDesdeResource();
+            if (this.curriculumGuardado == null) {
+                this.curriculumGuardado = cargarCurriculumDesdeResource();
+            }
 
-            curriculum.setNombre(cambios.getNombre());
-            curriculum.setPuesto(cambios.getPuesto());
-            curriculum.setPerfil(cambios.getPerfil());
-            curriculum.setTelefono(cambios.getTelefono());
-            curriculum.setCorreo(cambios.getCorreo());
-            curriculum.setSitio(cambios.getSitio());
-            curriculum.setHabilidades(cambios.getHabilidades());
-            curriculum.setIdiomas(cambios.getIdiomas());
-            curriculum.setEducacion(cambios.getEducacion());
-            curriculum.setPeriodo1(cambios.getPeriodo1());
-            curriculum.setEmpresa1(cambios.getEmpresa1());
-            curriculum.setDescripcion1(cambios.getDescripcion1());
+            // Actualizamos los datos
+            this.curriculumGuardado.setNombre(cambios.getNombre());
+            this.curriculumGuardado.setPuesto(cambios.getPuesto());
+            this.curriculumGuardado.setPerfil(cambios.getPerfil());
+            this.curriculumGuardado.setTelefono(cambios.getTelefono());
+            this.curriculumGuardado.setCorreo(cambios.getCorreo());
+            this.curriculumGuardado.setSitio(cambios.getSitio());
+            this.curriculumGuardado.setHabilidades(cambios.getHabilidades());
+            this.curriculumGuardado.setIdiomas(cambios.getIdiomas());
+            this.curriculumGuardado.setEducacion(cambios.getEducacion());
+            this.curriculumGuardado.setPeriodo1(cambios.getPeriodo1());
+            this.curriculumGuardado.setEmpresa1(cambios.getEmpresa1());
+            this.curriculumGuardado.setDescripcion1(cambios.getDescripcion1());
 
-            return ResponseEntity.ok(curriculum);
+            return ResponseEntity.ok(this.curriculumGuardado);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al actualizar los datos: " + e.getMessage());
         }
     }
 
+    // POST: Valida que ningún campo esté vacío
     @PostMapping
     public ResponseEntity<String> crearCampo(@RequestBody Curriculum curriculum) {
         List<String> vacios = new ArrayList<>();
@@ -95,8 +105,10 @@ public class Curriculum_api {
         return ResponseEntity.ok("Curriculum validado correctamente.");
     }
 
+    // DELETE: Vacía o limpia los datos en memoria
     @DeleteMapping
     public ResponseEntity<String> eliminarCampo() {
-        return ResponseEntity.ok("El registro ha sido procesado.");
+        this.curriculumGuardado = new Curriculum();
+        return ResponseEntity.ok("El registro ha sido restablecido.");
     }
 }
